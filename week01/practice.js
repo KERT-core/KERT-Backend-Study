@@ -1,15 +1,26 @@
 // ===== 아래 4개의 함수를 구현해 주세요. =====
 
 function findPost(posts, id) {
+  return posts.find(post => post.id === id) ?? null;
 }
 
 function searchPosts(posts, keyword) {
+  return posts.filter(post => post.title.includes(keyword));
 }
 
 function addPost(posts, title, author) {
+  const maxId = posts.reduce((max, post) => Math.max(max, post.id), 0);
+  const newPost = { id: maxId + 1, title, author };
+  posts.push(newPost);
+  return newPost;
 }
 
 function renderPostList(posts) {
+  if (posts.length === 0) {
+    return '<p>글이 없습니다</p>';
+  }
+  const postItems = posts.map(post => `<li>[${post.id}] ${post.title} (${post.author})</li>`).join('');
+  return `<ul>${postItems}</ul>`;
 }
 
 // ===== 이 아래는 채점 코드입니다. 수정하지 마세요 =====
