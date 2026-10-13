@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+
+<h2>글 목록</h2>
+
+<!-- 검색 폼 (도전 과제 ①) -->
+<form action="/posts" method="GET" style="margin-bottom: 15px;">
+  <input name="keyword" value="<%= keyword %>" placeholder="검색어 입력">
+  <button type="submit">검색</button>
+  <% if (keyword) { %>
+    <a href="/posts">전체 목록 보기</a>
+  <% } %>
+</form>
+
+<a href="/posts/new">글쓰기</a>
+
+<% if (posts.length === 0) { %>
+  <p>글이 없습니다</p>
+<% } else { %>
+  <ul>
+    <% for (const post of posts) { %>
+      <li>
+        <a href="/posts/<%= post.id %>">[<%= post.id %>] <%= post.title %></a>
+        (<%= post.author %>)
+      </li>
+    <% } %>
+  </ul>
+<% } %>
+
+<%- include('partials/footer') %>
