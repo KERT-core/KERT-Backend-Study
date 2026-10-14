@@ -14,22 +14,27 @@ const posts = [
 
 /*05. id중복 막기 - 글을 삭제한 뒤 새로 써도 id가 겹치지 않게
     글을 삭제한 뒤 새로 써도 id가 재사용되지 않음.*/
-let nextId = 1;
+let nextId = posts.reduce((max, post) => Math.max(max, post.id), 0) + 1;
 
 function findPost(posts,id) {
     return posts.find((post) => post.id === id) ?? null;
 }
 
 function addPost(posts,title,author,content) {
-    const maxid = posts.reduce((max,post)=>Math.max(max,post.id),0);
-    const post = { id:maxid+1,title,author,content}; //id = 가장 큰 id + 1
+    const post = { id:nextId,title,author,content}; //id = 가장 큰 id + 1
+    nextId++;
     posts.push(post);
     return post;
 }
 
 //01.목록을 EJS로 렌더.글이 없으면 '글이 없습니다'
+//도전 1: 제목에 keyword가 들어간 글만 목록에 보여주기
 app.get('/posts',(req,res) => {
-    res.render('list', { posts });
+    const keyword = (req.query.keyword ?? '').trim();
+
+    //keyword가 있을 때만 거르고, 없으면 전체 목록으로
+    const result = keyword ? posts.filter((post) => post.title.includes(keyword)) : posts;
+    res.render('list', { posts: result,keyword });
 });
 
 //02. 글쓰기 폼과 저장. 저장 후 새 글 상세로 redirect
@@ -38,8 +43,12 @@ app.get('/posts/new',(req,res)=> {
 });
 
 app.post('/posts',(req,res) => {
-    console.log(req.body);
     const {title,author,content} = req.body;
+    //도전 2: 빈 제목 막기 - 제목이 비어 있거나 공백뿐이면 저장하지 않기
+    if (!title || title.trim() === '') {
+        return res.status(400).render('new'); //400 응답 + 다시 글쓰기 화면
+    }
+
     const post = addPost(posts,title,author,content);
     res.redirect(`/posts/${post.id}`); //글 저장->redirect
 });
@@ -49,7 +58,7 @@ app.get('/posts/:id',(req,res) => {
     const id = Number(req.params.id);
     const post = findPost(posts,id);
     if (!post) {
-        return res.status(404).send('글이 없습니다.');
+        return res.status(404).render('404');
     }
     res.render('detail',{ post });
 });
@@ -63,6 +72,11 @@ app.post('/posts/:id/delete',(req,res)=> {
         posts.splice(index, 1);
     }
     res.redirect('/posts');
+});
+
+//도전 3: 없는 주소, 없는 글일 때 views/404.ejs를 렌더(상태 코드는 404)
+app.use((req,res) => {
+    res.status(404).render('404');
 });
 
 app.listen(PORT, () => {
