@@ -27,6 +27,11 @@ function addPost(posts,title,author,content) {
     return post;
 }
 
+// 루트 주소로 들어오면 목록으로 보내기
+app.get('/', (req, res) => {
+    res.redirect('/posts');
+});
+
 //01.목록을 EJS로 렌더.글이 없으면 '글이 없습니다'
 //도전 1: 제목에 keyword가 들어간 글만 목록에 보여주기
 app.get('/posts',(req,res) => {
