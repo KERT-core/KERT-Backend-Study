@@ -1,0 +1,35 @@
+<%- include('partials/header', { title: '관리자 페이지' }) %>
+
+<h2>관리자 페이지</h2>
+
+<p>회원 목록</p>
+
+<% if (users.length === 0) { %>
+  <p>등록된 회원이 없습니다.</p>
+<% } else { %>
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>회원 번호</th>
+        <th>아이디</th>
+        <th>권한</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% users.forEach(member => { %>
+        <tr>
+          <td><%= member.id %></td>
+          <td><%= member.username %></td>
+          <td><%= member.role %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+
+<p>
+  <a href="/posts">게시글 목록으로</a>
+</p>
+
+<%- include('partials/footer') %>
