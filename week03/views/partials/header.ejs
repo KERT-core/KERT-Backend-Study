@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title || '게시판' %></title>
+</head>
+<body>
+  <header>
+    <h1><a href="/posts">게시판</a></h1>
+
+    <nav>
+      <a href="/posts">게시글 목록</a>
+
+      <% if (user) { %>
+        <span><%= user.username %>님</span>
+
+        <a href="/posts/new">글쓰기</a>
+
+        <% if (user.role === 'admin') { %>
+          <a href="/admin">관리자 페이지</a>
+        <% } %>
+
+        <form action="/logout" method="POST" style="display: inline;">
+          <button type="submit">로그아웃</button>
+        </form>
+      <% } else { %>
+        <a href="/login">로그인</a>
+        <a href="/signup">회원가입</a>
+      <% } %>
+    </nav>
+  </header>
+
+  <hr>
+  <main>

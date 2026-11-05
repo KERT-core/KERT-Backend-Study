@@ -1,0 +1,39 @@
+<%- include('partials/header', { title: '게시글 목록' }) %>
+
+<h2>게시글 목록</h2>
+
+<% if (user) { %>
+  <p>
+    <a href="/posts/new">새 글 작성</a>
+  </p>
+<% } %>
+
+<% if (posts.length === 0) { %>
+  <p>등록된 게시글이 없습니다.</p>
+<% } else { %>
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% posts.forEach(post => { %>
+        <tr>
+          <td><%= post.id %></td>
+          <td>
+            <a href="/posts/<%= post.id %>">
+              <%= post.title %>
+            </a>
+          </td>
+          <td><%= post.username %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('partials/footer') %>
