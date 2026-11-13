@@ -1,0 +1,18 @@
+<%- include('partials/header') %>
+<h2>관리자 - 회원 목록</h2>
+<ul>
+  <% users.forEach(u => { %>
+    <li>
+      [<%= u.id %>] <%= u.username %> (<%= u.role %>)
+      <form action="/admin/users/<%= u.id %>/role" method="POST" style="display:inline; margin-left: 10px;">
+        <select name="role">
+          <option value="user" <%= u.role === 'user' ? 'selected' : '' %>>user</option>
+          <option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>admin</option>
+        </select>
+        <button type="submit">권한 변경</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+<p><a href="/posts">글 목록으로</a></p>
+<%- include('partials/footer') %>

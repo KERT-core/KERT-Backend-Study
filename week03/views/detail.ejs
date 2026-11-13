@@ -1,0 +1,23 @@
+<% if (user && (user.id === post.user_id || user.role === 'admin')) { %>
+ <form method="POST" action="/posts/<%= post.id %>/delete">
+ <button>삭제</button>
+ </form>
+<% } %>
+
+<h3>댓글</h3>
+<ul>
+  <% comments.forEach(comment => { %>
+    <li><strong><%= comment.username %></strong>: <%= comment.content %></li>
+  <% }) %>
+</ul>
+
+<% if (user) { %>
+  <form action="/posts/<%= post.id %>/comments" method="POST">
+    <input type="text" name="content" placeholder="댓글을 입력하세요" required>
+    <button type="submit">댓글 작성</button>
+  </form>
+<% } %>
+
+<h1><%= post.title %></h1>
+<p>작성자: <%= post.username %></p>
+<div><%= post.content %></div>
